@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sudeeksha Chagarlamudi — Robotics Systems Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0e17;--bg2:#0d1220;--surface:#111827;--surface2:#1a2332;
+  --cyan:#00e5ff;--cyan-dim:#00e5ff33;--cyan-glow:#00e5ff66;
+  --teal:#00bfa5;--electric:#6366f1;--electric-dim:#6366f133;
+  --accent:#f59e0b;--text:#e2e8f0;--text-dim:#94a3b8;--text-muted:#475569;
+  --border:#1e293b;
+  --grad1:linear-gradient(135deg,#00e5ff,#6366f1);
+  --grad2:linear-gradient(135deg,#00bfa5,#00e5ff);
+}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--cyan-dim) var(--bg)}
+body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+::selection{background:var(--cyan);color:var(--bg)}
+
+.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:60px 60px;opacity:.15}
+.grid-bg::after{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,var(--cyan-dim),transparent 70%)}
+
+
+
+.particles{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.particle{position:absolute;width:2px;height:2px;background:var(--cyan);border-radius:50%;opacity:0;
+  animation:particleFloat linear infinite}
+@keyframes particleFloat{
+  0%{transform:translateY(100vh) scale(0);opacity:0}
+  10%{opacity:.8}90%{opacity:.8}
+  100%{transform:translateY(-10vh) scale(1);opacity:0}}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 2rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(10,14,23,.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);transition:all .3s}
+nav.scrolled{padding:.6rem 2rem;box-shadow:0 4px 30px rgba(0,229,255,.05)}
+.nav-logo{font-family:'Orbitron',sans-serif;font-weight:800;font-size:1.2rem;
+  background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:2px}
+.nav-logo span{color:var(--accent);-webkit-text-fill-color:var(--accent)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:var(--text-dim);text-decoration:none;font-family:'Share Tech Mono',monospace;
+  font-size:.85rem;letter-spacing:1px;text-transform:uppercase;position:relative;transition:color .3s}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;
+  background:var(--grad1);transition:width .3s}
+.nav-links a:hover{color:var(--cyan)}
+.nav-links a:hover::after{width:100%}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;z-index:101}
+.hamburger span{width:25px;height:2px;background:var(--cyan);transition:.3s}
+
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;z-index:2;padding:6rem 4rem 4rem}
+.hero-content{max-width:700px}
+.hero-tag{font-family:'Share Tech Mono',monospace;font-size:.85rem;color:var(--cyan);
+  letter-spacing:3px;text-transform:uppercase;margin-bottom:1rem;opacity:0;animation:fadeSlideUp .8s .3s forwards}
+.hero-tag::before{content:'> ';color:var(--teal)}
+.hero h1{font-family:'Orbitron',sans-serif;font-size:clamp(2.2rem,5.5vw,4.2rem);font-weight:900;
+  line-height:1.1;margin-bottom:1.5rem;opacity:0;animation:fadeSlideUp .8s .5s forwards}
+.hero h1 .line1{display:block;color:var(--text)}
+.hero h1 .line2{display:block;background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero h1 .line3{display:block;color:var(--accent);font-size:.55em;margin-top:.3rem}
+.hero-desc{font-size:1.15rem;color:var(--text-dim);max-width:580px;margin-bottom:2.5rem;opacity:0;animation:fadeSlideUp .8s .7s forwards}
+.hero-buttons{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fadeSlideUp .8s .9s forwards}
+.btn{padding:.85rem 2rem;border:none;cursor:pointer;font-family:'Rajdhani',sans-serif;
+  font-size:1rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;transition:all .3s;position:relative;overflow:hidden}
+.btn-primary{background:var(--grad1);color:var(--bg);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--cyan-dim)}
+.btn-outline{background:transparent;color:var(--cyan);border:1px solid var(--cyan-dim);
+  clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px))}
+.btn-outline:hover{background:var(--cyan-dim);border-color:var(--cyan)}
+
+.hero-visual{position:absolute;right:4rem;top:50%;transform:translateY(-50%);
+  width:420px;height:420px;opacity:0;animation:fadeIn 1.2s 1s forwards}
+.robo-ring{position:absolute;inset:0;border:1px solid var(--cyan-dim);border-radius:50%;animation:roboSpin 20s linear infinite}
+.robo-ring:nth-child(2){inset:30px;border-color:var(--electric-dim);animation-duration:15s;animation-direction:reverse}
+.robo-ring:nth-child(3){inset:60px;border-color:var(--cyan-dim);animation-duration:25s}
+.robo-ring::before{content:'';position:absolute;top:-4px;left:50%;width:8px;height:8px;
+  background:var(--cyan);border-radius:50%;box-shadow:0 0 10px var(--cyan)}
+.robo-ring:nth-child(2)::before{background:var(--electric);box-shadow:0 0 10px var(--electric)}
+.robo-center{position:absolute;inset:90px;display:flex;align-items:center;justify-content:center}
+.robo-svg{width:160px;height:160px}
+@keyframes roboSpin{to{transform:rotate(360deg)}}
+
+section{position:relative;z-index:2;padding:6rem 4rem}
+.section-header{text-align:center;margin-bottom:4rem}
+.section-tag{font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--teal);letter-spacing:4px;text-transform:uppercase;margin-bottom:.5rem}
+.section-title{font-family:'Orbitron',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700}
+.section-title span{background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.section-line{width:60px;height:3px;background:var(--grad1);margin:1rem auto 0;border-radius:2px}
+
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;max-width:1100px;margin:0 auto;align-items:center}
+.about-visual{position:relative}
+.about-img-frame{width:100%;aspect-ratio:1;background:var(--surface);border:1px solid var(--border);
+  position:relative;overflow:hidden;
+  clip-path:polygon(0 0,calc(100% - 30px) 0,100% 30px,100% 100%,30px 100%,0 calc(100% - 30px))}
+.about-img-frame::before{content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--cyan-dim),transparent 50%,var(--electric-dim));z-index:1}
+.about-img-frame .robo-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--surface),var(--surface2))}
+.about-img-frame .robo-placeholder svg{width:60%;height:60%;opacity:.3}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.5rem}
+.stat-card{background:var(--surface);border:1px solid var(--border);padding:1rem;text-align:center;
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));transition:all .3s}
+.stat-card:hover{border-color:var(--cyan);box-shadow:0 0 20px var(--cyan-dim)}
+.stat-num{font-family:'Orbitron',sans-serif;font-size:1.6rem;font-weight:700;
+  background:var(--grad1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;margin-top:.25rem}
+.about-text h3{font-family:'Orbitron',sans-serif;font-size:1.4rem;margin-bottom:1rem}
+.about-text p{color:var(--text-dim);margin-bottom:1rem;font-size:1.05rem}
+.tech-tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem}
+.tech-tag{padding:.35rem .85rem;background:var(--cyan-dim);color:var(--cyan);
+  font-family:'Share Tech Mono',monospace;font-size:.75rem;letter-spacing:1px;
+  border:1px solid transparent;transition:all .3s;
+  clip-path:polygon(0 0,calc(100% - 6px) 0,100% 6px,100% 100%,6px 100%,0 calc(100% - 6px))}
+.tech-tag:hover{border-color:var(--cyan);background:rgba(0,229,255,.15)}
+
+.skills-container{max-width:1000px;margin:0 auto}
+.skill-category{margin-bottom:3rem}
+.skill-cat-title{font-family:'Share Tech Mono',monospace;font-size:.85rem;color:var(--teal);
+  letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem;padding-left:1rem;border-left:3px solid var(--teal)}
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+.skill-item{background:var(--surface);border:1px solid var(--border);padding:1.2rem;
+  position:relative;overflow:hidden;transition:all .4s;cursor:default;
+  clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px))}
+.skill-item::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;
+  background:var(--grad1);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.skill-item:hover{border-color:var(--cyan);transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,229,255,.08)}
+.skill-item:hover::before{transform:scaleX(1)}
+.skill-icon{font-size:1.5rem;margin-bottom:.5rem;display:block}
+.skill-name{font-weight:600;font-size:1rem;margin-bottom:.3rem}
+.skill-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:.5rem}
+.skill-bar-fill{height:100%;background:var(--grad1);border-radius:2px;
+  transform:scaleX(0);transform-origin:left;transition:transform 1.2s cubic-bezier(.16,1,.3,1)}
+.skill-item.visible .skill-bar-fill{transform:scaleX(var(--level))}
+
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:2rem;max-width:1200px;margin:0 auto}
+.project-card{background:var(--surface);border:1px solid var(--border);overflow:hidden;transition:all .5s;position:relative;
+  clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))}
+.project-card:hover{transform:translateY(-5px);border-color:var(--cyan);box-shadow:0 12px 40px rgba(0,229,255,.1)}
+.project-img{width:100%;height:220px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--surface2),var(--bg2))}
+.project-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--surface),transparent 50%)}
+.project-img svg{width:100%;height:100%;opacity:.25;padding:2rem}
+.project-number{position:absolute;top:1rem;left:1rem;font-family:'Orbitron',sans-serif;
+  font-size:.7rem;color:var(--cyan);letter-spacing:2px;
+  background:rgba(10,14,23,.8);padding:.3rem .6rem;backdrop-filter:blur(10px);border:1px solid var(--cyan-dim)}
+.project-tags{position:absolute;top:1rem;right:1rem;display:flex;gap:.4rem;flex-wrap:wrap}
+.project-tag{font-family:'Share Tech Mono',monospace;font-size:.65rem;padding:.2rem .5rem;
+  background:rgba(10,14,23,.8);color:var(--teal);border:1px solid var(--border);backdrop-filter:blur(10px)}
+.project-body{padding:1.5rem}
+.project-title{font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:.5rem}
+.project-desc{color:var(--text-dim);font-size:.95rem;line-height:1.6;margin-bottom:1rem}
+.project-links{display:flex;gap:1rem}
+.project-link{color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:.8rem;
+  text-decoration:none;letter-spacing:1px;transition:color .3s}
+.project-link:hover{color:var(--accent)}
+.project-link::before{content:'\2192 '}
+
+.timeline{max-width:800px;margin:0 auto;position:relative;padding-left:3rem}
+.timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:linear-gradient(to bottom,var(--cyan),var(--electric),var(--teal));opacity:.3}
+.timeline-item{position:relative;margin-bottom:3rem;padding-left:2rem;opacity:0;transform:translateX(-20px);transition:all .6s}
+.timeline-item.visible{opacity:1;transform:translateX(0)}
+.timeline-item::before{content:'';position:absolute;left:-3.55rem;top:.5rem;width:12px;height:12px;
+  background:var(--bg);border:2px solid var(--cyan);border-radius:50%;z-index:1;box-shadow:0 0 10px var(--cyan-dim)}
+.timeline-item::after{content:'';position:absolute;left:-3rem;top:.85rem;width:28px;height:2px;background:var(--cyan-dim)}
+.timeline-date{font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--teal);letter-spacing:2px}
+.timeline-role{font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:600;margin:.3rem 0}
+.timeline-company{color:var(--cyan);font-weight:500;margin-bottom:.3rem}
+.timeline-location{font-family:'Share Tech Mono',monospace;font-size:.75rem;color:var(--text-muted);margin-bottom:.5rem}
+.timeline-desc{color:var(--text-dim);font-size:.95rem}
+.timeline-desc ul{list-style:none;padding:0}
+.timeline-desc ul li{position:relative;padding-left:1.2rem;margin-bottom:.4rem}
+.timeline-desc ul li::before{content:'\25B9';position:absolute;left:0;color:var(--cyan);font-size:.9rem}
+
+.edu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:2rem;max-width:1000px;margin:0 auto}
+.edu-card{background:var(--surface);border:1px solid var(--border);padding:2rem;position:relative;transition:all .4s;
+  clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,20px 100%,0 calc(100% - 20px))}
+.edu-card:hover{border-color:var(--electric);transform:translateY(-3px);box-shadow:0 8px 30px var(--electric-dim)}
+.edu-icon{font-size:2rem;margin-bottom:1rem}
+.edu-degree{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.3rem}
+.edu-school{color:var(--cyan);font-weight:500;font-size:1rem;margin-bottom:.3rem}
+.edu-meta{font-family:'Share Tech Mono',monospace;font-size:.8rem;color:var(--text-muted);margin-bottom:.2rem}
+.edu-gpa{font-family:'Share Tech Mono',monospace;font-size:.85rem;color:var(--accent);margin-top:.5rem}
+
+.extras-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;max-width:1100px;margin:0 auto}
+.extra-card{background:var(--surface);border:1px solid var(--border);padding:1.8rem;transition:all .4s;position:relative;
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))}
+.extra-card:hover{border-color:var(--electric);transform:translateY(-3px);box-shadow:0 8px 30px var(--electric-dim)}
+.extra-icon{font-size:2rem;margin-bottom:1rem;display:block}
+.extra-title{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:600;margin-bottom:.5rem}
+.extra-desc{color:var(--text-dim);font-size:.9rem}
+
+.contact-section{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;max-width:1000px;margin:0 auto;align-items:center}
+.contact-info h3{font-family:'Orbitron',sans-serif;font-size:1.6rem;margin-bottom:1rem}
+.contact-info p{color:var(--text-dim);margin-bottom:2rem;font-size:1.05rem}
+.contact-links{display:flex;flex-direction:column;gap:1rem}
+.contact-link{display:flex;align-items:center;gap:1rem;color:var(--text-dim);text-decoration:none;
+  font-family:'Share Tech Mono',monospace;font-size:.9rem;transition:color .3s}
+.contact-link:hover{color:var(--cyan)}
+.contact-link svg{width:20px;height:20px;stroke:var(--cyan);fill:none;stroke-width:2;flex-shrink:0}
+.contact-form{display:flex;flex-direction:column;gap:1rem}
+.form-group{position:relative}
+.form-group input,.form-group textarea{width:100%;padding:1rem;background:var(--bg);
+  border:1px solid var(--border);color:var(--text);font-family:'Rajdhani',sans-serif;
+  font-size:1rem;outline:none;transition:border-color .3s;resize:none}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-dim)}
+.form-group label{position:absolute;top:-.6rem;left:.8rem;background:var(--surface);padding:0 .4rem;
+  font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}
+
+footer{position:relative;z-index:2;padding:2rem 4rem;text-align:center;border-top:1px solid var(--border)}
+footer p{color:var(--text-muted);font-family:'Share Tech Mono',monospace;font-size:.8rem;letter-spacing:1px}
+footer .footer-cyan{color:var(--cyan)}
+
+.reveal{opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+
+@keyframes fadeSlideUp{to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{to{opacity:1}}
+
+@media(max-width:900px){
+  .hero{padding:6rem 2rem 3rem}
+  .hero-visual{display:none}
+  section{padding:4rem 2rem}
+  .about-grid,.contact-grid{grid-template-columns:1fr;gap:2rem}
+  .projects-grid,.edu-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  nav.open .nav-links{display:flex;position:absolute;top:100%;left:0;right:0;
+    flex-direction:column;background:rgba(10,14,23,.95);padding:1rem 2rem;gap:1rem;
+    border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
+}
+@media(max-width:600px){
+  .hero h1{font-size:2rem}
+  .about-stats{grid-template-columns:repeat(3,1fr);gap:.5rem}
+  .skills-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<div class="particles" id="particles"></div>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <div class="nav-logo">SUDEEKSHA<span>.</span>DEV</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="hamburger" onclick="this.closest('nav').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <p class="hero-tag">initializing portfolio sequence</p>
+    <h1>
+      <span class="line1">SUDEEKSHA</span>
+      <span class="line2">CHAGARLAMUDI</span>
+      <span class="line3">Robotics Systems Engineer</span>
+    </h1>
+    <p class="hero-desc">Robotics systems engineer with hands-on experience across autonomous vehicles, industrial robotics, and embedded platforms. Strong in ROS/ROS2 development, perception, sensor fusion, and PLC-integrated system testing.</p>
+    <div class="hero-buttons">
+      <a href="#projects" class="btn btn-primary">View Projects &#8599;</a>
+      <a href="#contact" class="btn btn-outline">Get In Touch</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="robo-ring"></div>
+    <div class="robo-ring"></div>
+    <div class="robo-ring"></div>
+    <div class="robo-center">
+      <svg class="robo-svg" viewBox="0 0 200 200" fill="none">
+        <rect x="55" y="30" width="90" height="75" rx="12" stroke="var(--cyan)" stroke-width="1.5" fill="var(--cyan-dim)"/>
+        <circle cx="80" cy="62" r="10" stroke="var(--cyan)" stroke-width="1.5" fill="none"><animate attributeName="r" values="10;12;10" dur="2s" repeatCount="indefinite"/></circle>
+        <circle cx="120" cy="62" r="10" stroke="var(--cyan)" stroke-width="1.5" fill="none"><animate attributeName="r" values="10;12;10" dur="2s" repeatCount="indefinite" begin=".5s"/></circle>
+        <circle cx="80" cy="62" r="4" fill="var(--cyan)"><animate attributeName="opacity" values="1;.3;1" dur="3s" repeatCount="indefinite"/></circle>
+        <circle cx="120" cy="62" r="4" fill="var(--cyan)"><animate attributeName="opacity" values="1;.3;1" dur="3s" repeatCount="indefinite" begin="1s"/></circle>
+        <line x1="85" y1="85" x2="115" y2="85" stroke="var(--teal)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="100" y1="30" x2="100" y2="15" stroke="var(--cyan)" stroke-width="1.5"/>
+        <circle cx="100" cy="12" r="4" fill="var(--accent)"><animate attributeName="opacity" values="1;.2;1" dur="1.5s" repeatCount="indefinite"/></circle>
+        <rect x="60" y="110" width="80" height="55" rx="8" stroke="var(--electric)" stroke-width="1.5" fill="var(--electric-dim)"/>
+        <line x1="100" y1="105" x2="100" y2="110" stroke="var(--cyan)" stroke-width="2"/>
+        <circle cx="85" cy="132" r="5" stroke="var(--cyan)" stroke-width="1" fill="var(--cyan-dim)"/>
+        <circle cx="100" cy="132" r="5" stroke="var(--cyan)" stroke-width="1" fill="var(--cyan-dim)"/>
+        <circle cx="115" cy="132" r="5" stroke="var(--cyan)" stroke-width="1" fill="var(--cyan-dim)"/>
+        <rect x="78" y="145" width="44" height="10" rx="3" stroke="var(--teal)" stroke-width="1" fill="none"/>
+        <line x1="55" y1="120" x2="35" y2="140" stroke="var(--electric)" stroke-width="2" stroke-linecap="round"><animate attributeName="y2" values="140;135;140" dur="3s" repeatCount="indefinite"/></line>
+        <circle cx="33" cy="143" r="5" stroke="var(--electric)" stroke-width="1.5" fill="none"/>
+        <line x1="145" y1="120" x2="165" y2="140" stroke="var(--electric)" stroke-width="2" stroke-linecap="round"><animate attributeName="y2" values="140;145;140" dur="3s" repeatCount="indefinite" begin="1.5s"/></line>
+        <circle cx="167" cy="143" r="5" stroke="var(--electric)" stroke-width="1.5" fill="none"/>
+        <line x1="80" y1="165" x2="75" y2="190" stroke="var(--electric)" stroke-width="2"/>
+        <line x1="120" y1="165" x2="125" y2="190" stroke="var(--electric)" stroke-width="2"/>
+        <rect x="65" y="188" width="20" height="6" rx="3" fill="var(--electric-dim)" stroke="var(--electric)" stroke-width="1"/>
+        <rect x="115" y="188" width="20" height="6" rx="3" fill="var(--electric-dim)" stroke="var(--electric)" stroke-width="1"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about">
+  <div class="section-header reveal">
+    <p class="section-tag">// 001 &#8212; About</p>
+    <h2 class="section-title">Who <span>I Am</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-img-frame">
+        <img src="https://i.postimg.cc/L6B8XmMz/IMG-8028-Copy-Copy.jpg" alt="Sudeeksha Chagarlamudi" style="width:100%;height:100%;object-fit:cover;object-position:center top;">
+      </div>
+      <div class="about-stats">
+        <div class="stat-card"><div class="stat-num" data-count="4" data-suffix="+">0</div><div class="stat-label">Years Exp.</div></div>
+        <div class="stat-card"><div class="stat-num" data-count="4">0</div><div class="stat-label">Roles</div></div>
+        <div class="stat-card"><div class="stat-num" data-count="3.93" data-decimal="true">0</div><div class="stat-label">M.Sc. GPA</div></div>
+      </div>
+    </div>
+    <div class="about-text reveal reveal-delay-2">
+      <h3>Engineering Intelligent Robotic Systems</h3>
+      <p>I'm a Robotics Systems Engineer with hands-on experience building and deploying autonomous vehicles, industrial robotic systems, and embedded platforms. From CUDA-accelerated perception pipelines on autonomous cars to PLC-based testing frameworks for robotic subsystems, I thrive where hardware meets intelligent software.</p>
+      <p>My work spans the full robotics stack &#8212; from low-level embedded firmware and sensor integration to high-level perception, sensor fusion, SLAM, and real-time computer vision. I've deployed systems on platforms ranging from NVIDIA Jetson to drive-by-wire vehicles, always with a focus on reliability and real-world performance.</p>
+      <div class="tech-tags">
+        <span class="tech-tag">ROS / ROS2</span><span class="tech-tag">Python</span><span class="tech-tag">C++</span>
+        <span class="tech-tag">CUDA</span><span class="tech-tag">Sensor Fusion</span><span class="tech-tag">SLAM</span>
+        <span class="tech-tag">Computer Vision</span><span class="tech-tag">OpenCV</span><span class="tech-tag">PyTorch</span>
+        <span class="tech-tag">Embedded C</span><span class="tech-tag">PLCs (Beckhoff)</span><span class="tech-tag">NVIDIA Jetson</span>
+        <span class="tech-tag">Gazebo</span><span class="tech-tag">CARLA</span><span class="tech-tag">Docker</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Skills -->
+<section id="skills" style="background:var(--bg2)">
+  <div class="section-header reveal">
+    <p class="section-tag">// 002 &#8212; Skills</p>
+    <h2 class="section-title">Technical <span>Arsenal</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-container">
+    <div class="skill-category reveal">
+      <h3 class="skill-cat-title">Robotics &amp; Autonomy</h3>
+      <div class="skills-grid">
+        <div class="skill-item"><span class="skill-icon">&#129302;</span><span class="skill-name">ROS / ROS 2</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.95"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#129517;</span><span class="skill-name">Sensor Fusion</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.92"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#128205;</span><span class="skill-name">SLAM</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.88"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#128739;</span><span class="skill-name">Path Planning</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.85"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#9881;</span><span class="skill-name">Motion Control</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.87"></div></div></div>
+      </div>
+    </div>
+    <div class="skill-category reveal reveal-delay-1">
+      <h3 class="skill-cat-title">Embedded &amp; Industrial Systems</h3>
+      <div class="skills-grid">
+        <div class="skill-item"><span class="skill-icon">&#128994;</span><span class="skill-name">NVIDIA Jetson</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.9"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#127981;</span><span class="skill-name">PLCs (Beckhoff)</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.85"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#128268;</span><span class="skill-name">PROFINET / I/O</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.82"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#128295;</span><span class="skill-name">Microcontrollers</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.85"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#9889;</span><span class="skill-name">Actuators &amp; Valves</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.83"></div></div></div>
+      </div>
+    </div>
+    <div class="skill-category reveal reveal-delay-2">
+      <h3 class="skill-cat-title">Perception &amp; AI</h3>
+      <div class="skills-grid">
+        <div class="skill-item"><span class="skill-icon">&#128065;</span><span class="skill-name">Computer Vision</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.92"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#128247;</span><span class="skill-name">OpenCV</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.9"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#129504;</span><span class="skill-name">PyTorch</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.85"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#128293;</span><span class="skill-name">TensorFlow</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.82"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#9889;</span><span class="skill-name">Real-time Inference</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.88"></div></div></div>
+      </div>
+    </div>
+    <div class="skill-category reveal reveal-delay-3">
+      <h3 class="skill-cat-title">Programming &amp; Tools</h3>
+      <div class="skills-grid">
+        <div class="skill-item"><span class="skill-icon">&#128013;</span><span class="skill-name">Python</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.95"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#9889;</span><span class="skill-name">C / C++</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.88"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#127918;</span><span class="skill-name">CUDA</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.82"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#128039;</span><span class="skill-name">Linux (Ubuntu)</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.92"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#128256;</span><span class="skill-name">Git</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.9"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#128051;</span><span class="skill-name">Docker</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.8"></div></div></div>
+      </div>
+    </div>
+    <div class="skill-category reveal reveal-delay-4">
+      <h3 class="skill-cat-title">Simulation &amp; Design</h3>
+      <div class="skills-grid">
+        <div class="skill-item"><span class="skill-icon">&#127760;</span><span class="skill-name">Gazebo</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.87"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#128663;</span><span class="skill-name">CARLA</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.85"></div></div></div>
+        <div class="skill-item"><span class="skill-icon">&#128202;</span><span class="skill-name">MATLAB / Simulink</span><div class="skill-bar"><div class="skill-bar-fill" style="--level:.82"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects -->
+<section id="projects">
+  <div class="section-header reveal">
+    <p class="section-tag">// 003 &#8212; Projects</p>
+    <h2 class="section-title">Featured <span>Work</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="projects-grid">
+    <!-- Project 1: VisionSpeak -->
+    <div class="project-card reveal">
+      <div class="project-img">
+        <svg viewBox="0 0 400 250" fill="none">
+          <!-- Document/Image -->
+          <rect x="80" y="50" width="100" height="130" rx="6" stroke="var(--cyan)" stroke-width="1.5" fill="var(--cyan-dim)"/>
+          <line x1="95" y1="75" x2="165" y2="75" stroke="var(--teal)" stroke-width="1.5" opacity=".5"/>
+          <line x1="95" y1="90" x2="155" y2="90" stroke="var(--teal)" stroke-width="1.5" opacity=".4"/>
+          <line x1="95" y1="105" x2="160" y2="105" stroke="var(--teal)" stroke-width="1.5" opacity=".5"/>
+          <line x1="95" y1="120" x2="145" y2="120" stroke="var(--teal)" stroke-width="1.5" opacity=".4"/>
+          <line x1="95" y1="135" x2="158" y2="135" stroke="var(--teal)" stroke-width="1.5" opacity=".3"/>
+          <line x1="95" y1="150" x2="140" y2="150" stroke="var(--teal)" stroke-width="1.5" opacity=".3"/>
+          <!-- OCR scan effect -->
+          <rect x="88" y="68" width="90" height="20" rx="2" stroke="var(--accent)" stroke-width="1" fill="none" opacity=".6" stroke-dasharray="3 3">
+            <animate attributeName="y" values="68;145;68" dur="4s" repeatCount="indefinite"/>
+          </rect>
+          <!-- Arrow flow -->
+          <line x1="195" y1="115" x2="230" y2="115" stroke="var(--cyan)" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <polygon points="230,110 240,115 230,120" fill="var(--cyan)" opacity=".6"/>
+          <!-- AI Brain -->
+          <circle cx="275" cy="90" r="30" stroke="var(--electric)" stroke-width="1.5" fill="var(--electric-dim)"/>
+          <text x="262" y="95" fill="var(--electric)" font-size="8" font-family="monospace">OCR</text>
+          <!-- Arrow to speaker -->
+          <line x1="275" y1="125" x2="275" y2="150" stroke="var(--cyan)" stroke-width="1.5" stroke-dasharray="4 4"/>
+          <polygon points="270,150 275,160 280,150" fill="var(--cyan)" opacity=".6"/>
+          <!-- Speaker icon -->
+          <rect x="258" y="165" width="15" height="20" rx="2" stroke="var(--accent)" stroke-width="1.5" fill="var(--surface2)"/>
+          <polygon points="273,165 295,150 295,200 273,185" stroke="var(--accent)" stroke-width="1.5" fill="none"/>
+          <!-- Sound waves -->
+          <path d="M300 165 Q310 175 300 185" stroke="var(--accent)" stroke-width="1" fill="none" opacity=".5"/>
+          <path d="M308 158 Q322 175 308 192" stroke="var(--accent)" stroke-width="1" fill="none" opacity=".35"/>
+          <path d="M316 152 Q334 175 316 198" stroke="var(--accent)" stroke-width="1" fill="none" opacity=".2"/>
+        </svg>
+        <span class="project-number">PRJ_001</span>
+        <div class="project-tags"><span class="project-tag">Python</span><span class="project-tag">OCR</span><span class="project-tag">TTS</span></div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">VisionSpeak</h3>
+        <p class="project-desc">Hands-free OCR and Text-to-Speech assistant. Extracts text from images using optical character recognition and converts it to speech for accessibility-focused, hands-free interaction.</p>
+        <div class="project-links"><a href="https://github.com/sudeekshach/VisionSpeak" class="project-link" target="_blank">GitHub</a></div>
+      </div>
+    </div>
+    <!-- Project 2: Parrot Mambo Line Tracker -->
+    <div class="project-card reveal reveal-delay-1">
+      <div class="project-img">
+        <svg viewBox="0 0 400 250" fill="none">
+          <!-- Drone body -->
+          <ellipse cx="200" cy="100" rx="45" ry="12" stroke="var(--cyan)" stroke-width="1.5" fill="var(--cyan-dim)"/>
+          <!-- Propeller arms -->
+          <line x1="155" y1="100" x2="115" y2="80" stroke="var(--electric)" stroke-width="2"/>
+          <line x1="245" y1="100" x2="285" y2="80" stroke="var(--electric)" stroke-width="2"/>
+          <line x1="165" y1="95" x2="130" y2="75" stroke="var(--electric)" stroke-width="2"/>
+          <line x1="235" y1="95" x2="270" y2="75" stroke="var(--electric)" stroke-width="2"/>
+          <!-- Propellers spinning -->
+          <ellipse cx="115" cy="77" rx="22" ry="4" stroke="var(--teal)" stroke-width="1" fill="none" opacity=".5">
+            <animate attributeName="rx" values="22;18;22" dur="0.3s" repeatCount="indefinite"/>
+          </ellipse>
+          <ellipse cx="285" cy="77" rx="22" ry="4" stroke="var(--teal)" stroke-width="1" fill="none" opacity=".5">
+            <animate attributeName="rx" values="18;22;18" dur="0.3s" repeatCount="indefinite"/>
+          </ellipse>
+          <ellipse cx="130" cy="72" rx="22" ry="4" stroke="var(--teal)" stroke-width="1" fill="none" opacity=".5">
+            <animate attributeName="rx" values="20;16;20" dur="0.3s" repeatCount="indefinite"/>
+          </ellipse>
+          <ellipse cx="270" cy="72" rx="22" ry="4" stroke="var(--teal)" stroke-width="1" fill="none" opacity=".5">
+            <animate attributeName="rx" values="16;20;16" dur="0.3s" repeatCount="indefinite"/>
+          </ellipse>
+          <!-- Camera -->
+          <circle cx="200" cy="115" r="6" stroke="var(--accent)" stroke-width="1.5" fill="var(--surface2)"/>
+          <circle cx="200" cy="115" r="2.5" fill="var(--accent)" opacity=".7">
+            <animate attributeName="opacity" values=".7;1;.7" dur="2s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Vision cone -->
+          <polygon points="200,122 150,200 250,200" stroke="var(--teal)" stroke-width=".8" fill="var(--teal)" opacity=".06"/>
+          <line x1="200" y1="122" x2="150" y2="200" stroke="var(--teal)" stroke-width=".8" opacity=".3" stroke-dasharray="4 4"/>
+          <line x1="200" y1="122" x2="250" y2="200" stroke="var(--teal)" stroke-width=".8" opacity=".3" stroke-dasharray="4 4"/>
+          <!-- Line path on ground -->
+          <path d="M100 210 Q150 195 200 210 Q250 225 300 210" stroke="var(--accent)" stroke-width="3" fill="none" opacity=".7"/>
+          <path d="M100 210 Q150 195 200 210 Q250 225 300 210" stroke="var(--accent)" stroke-width="8" fill="none" opacity=".1"/>
+          <text x="145" y="242" fill="var(--text-muted)" font-size="7" font-family="monospace">VISION-BASED LINE TRACKING</text>
+        </svg>
+        <span class="project-number">PRJ_002</span>
+        <div class="project-tags"><span class="project-tag">MATLAB</span><span class="project-tag">Simulink</span><span class="project-tag">Drone</span></div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Parrot Mambo Line Tracker</h3>
+        <p class="project-desc">Autonomous line-following drone using the Parrot Mambo mini-drone with computer vision-based path tracking. Implements a vision algorithm for real-time line detection and flight control.</p>
+        <div class="project-links"><a href="https://github.com/sudeekshach/parrot-mambo-line-tracker" class="project-link" target="_blank">GitHub</a></div>
+      </div>
+    </div>
+    <!-- Project 3: Vision-Guided Mini Car -->
+    <div class="project-card reveal reveal-delay-2">
+      <div class="project-img">
+        <svg viewBox="0 0 400 250" fill="none">
+          <!-- Mini car body -->
+          <rect x="140" y="130" width="120" height="50" rx="10" stroke="var(--cyan)" stroke-width="1.5" fill="var(--cyan-dim)"/>
+          <rect x="160" y="115" width="80" height="25" rx="8" stroke="var(--cyan)" stroke-width="1.5" fill="var(--surface2)"/>
+          <!-- Wheels -->
+          <circle cx="170" cy="185" r="14" stroke="var(--electric)" stroke-width="2" fill="var(--electric-dim)"/>
+          <circle cx="230" cy="185" r="14" stroke="var(--electric)" stroke-width="2" fill="var(--electric-dim)"/>
+          <circle cx="170" cy="185" r="5" stroke="var(--cyan)" stroke-width="1" fill="none"/>
+          <circle cx="230" cy="185" r="5" stroke="var(--cyan)" stroke-width="1" fill="none"/>
+          <!-- Camera on front -->
+          <circle cx="265" cy="148" r="8" stroke="var(--accent)" stroke-width="1.5" fill="var(--surface2)"/>
+          <circle cx="265" cy="148" r="3" fill="var(--accent)" opacity=".7">
+            <animate attributeName="opacity" values=".7;1;.7" dur="1.5s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Vision beams -->
+          <line x1="273" y1="145" x2="340" y2="120" stroke="var(--teal)" stroke-width=".8" opacity=".4" stroke-dasharray="4 4"/>
+          <line x1="273" y1="148" x2="350" y2="148" stroke="var(--teal)" stroke-width=".8" opacity=".5" stroke-dasharray="4 4"/>
+          <line x1="273" y1="151" x2="340" y2="176" stroke="var(--teal)" stroke-width=".8" opacity=".4" stroke-dasharray="4 4"/>
+          <!-- Detected object -->
+          <rect x="330" y="115" width="35" height="65" rx="3" stroke="var(--accent)" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/>
+          <text x="335" y="190" fill="var(--accent)" font-size="6" font-family="monospace">OBJ</text>
+          <!-- Path arrows -->
+          <path d="M80 205 L130 205" stroke="var(--teal)" stroke-width="1" opacity=".4"/>
+          <path d="M90 195 L130 195 L130 205" stroke="var(--teal)" stroke-width="1" opacity=".3"/>
+          <polygon points="125,200 135,202.5 125,205" fill="var(--teal)" opacity=".5"/>
+          <text x="140" y="225" fill="var(--text-muted)" font-size="7" font-family="monospace">AUTONOMOUS NAVIGATION</text>
+        </svg>
+        <span class="project-number">PRJ_003</span>
+        <div class="project-tags"><span class="project-tag">CV</span><span class="project-tag">Embedded</span><span class="project-tag">Control</span></div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Vision-Guided Mini Car</h3>
+        <p class="project-desc">Autonomous mini car with vision-based guidance for obstacle detection and navigation. Combines real-time computer vision with embedded control for autonomous driving behavior.</p>
+        <div class="project-links"><a href="https://github.com/sudeekshach/vision-guided-mini-car" class="project-link" target="_blank">GitHub</a></div>
+      </div>
+    </div>
+    <!-- Project 4: L1/L2 Automation Safety Metrics -->
+    <div class="project-card reveal reveal-delay-3">
+      <div class="project-img">
+        <svg viewBox="0 0 400 250" fill="none">
+          <!-- Dashboard frame -->
+          <rect x="60" y="40" width="280" height="170" rx="8" stroke="var(--electric)" stroke-width="1.5" fill="var(--surface2)"/>
+          <!-- Title bar -->
+          <rect x="60" y="40" width="280" height="24" rx="8" stroke="var(--electric)" stroke-width="1" fill="var(--electric-dim)"/>
+          <circle cx="78" cy="52" r="4" fill="var(--teal)" opacity=".6"/>
+          <circle cx="92" cy="52" r="4" fill="var(--accent)" opacity=".6"/>
+          <circle cx="106" cy="52" r="4" fill="var(--cyan)" opacity=".6"/>
+          <text x="150" y="56" fill="var(--text-dim)" font-size="7" font-family="monospace">SAFETY METRICS DASHBOARD</text>
+          <!-- Bar chart -->
+          <rect x="85" y="155" width="20" height="40" rx="2" fill="var(--cyan)" opacity=".4"/>
+          <rect x="115" y="135" width="20" height="60" rx="2" fill="var(--cyan)" opacity=".5"/>
+          <rect x="145" y="120" width="20" height="75" rx="2" fill="var(--teal)" opacity=".5"/>
+          <rect x="175" y="140" width="20" height="55" rx="2" fill="var(--teal)" opacity=".4"/>
+          <rect x="205" y="110" width="20" height="85" rx="2" fill="var(--electric)" opacity=".5"/>
+          <rect x="235" y="130" width="20" height="65" rx="2" fill="var(--electric)" opacity=".4"/>
+          <!-- Trend line -->
+          <polyline points="95,145 125,128 155,112 185,132 215,102 245,122" stroke="var(--accent)" stroke-width="2" fill="none"/>
+          <circle cx="95" cy="145" r="3" fill="var(--accent)"/>
+          <circle cx="155" cy="112" r="3" fill="var(--accent)"/>
+          <circle cx="215" cy="102" r="3" fill="var(--accent)"/>
+          <!-- Labels -->
+          <text x="85" y="205" fill="var(--text-muted)" font-size="6" font-family="monospace">L1</text>
+          <text x="145" y="205" fill="var(--text-muted)" font-size="6" font-family="monospace">L2</text>
+          <text x="205" y="205" fill="var(--text-muted)" font-size="6" font-family="monospace">L2+</text>
+          <!-- Safety shield -->
+          <path d="M310 85 L310 105 Q310 120 295 128 Q280 120 280 105 L280 85 L295 78 Z" stroke="var(--teal)" stroke-width="1.5" fill="var(--cyan-dim)"/>
+          <text x="288" y="110" fill="var(--teal)" font-size="9" font-family="monospace">&#10003;</text>
+          <text x="115" y="225" fill="var(--text-muted)" font-size="7" font-family="monospace">SAE L1 &#183; L2 AUTOMATION LEVELS</text>
+        </svg>
+        <span class="project-number">PRJ_004</span>
+        <div class="project-tags"><span class="project-tag">Safety</span><span class="project-tag">ADAS</span><span class="project-tag">Metrics</span></div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">L1/L2 Automation Safety Metrics</h3>
+        <p class="project-desc">Analysis and evaluation framework for SAE Level 1 and Level 2 driving automation safety metrics. Quantifies safety performance benchmarks for ADAS features and autonomous driving systems.</p>
+        <div class="project-links"><a href="https://github.com/sudeekshach/level1-2-automation-safety-metrics" class="project-link" target="_blank">GitHub</a></div>
+      </div>
+    </div>
+    <!-- Project 5: Automation Workstation Controller -->
+    <div class="project-card reveal reveal-delay-4">
+      <div class="project-img">
+        <svg viewBox="0 0 400 250" fill="none">
+          <!-- Workstation base -->
+          <rect x="100" y="160" width="200" height="50" rx="6" stroke="var(--cyan)" stroke-width="1.5" fill="var(--cyan-dim)"/>
+          <!-- Conveyor belt lines -->
+          <line x1="100" y1="175" x2="300" y2="175" stroke="var(--teal)" stroke-width="1" opacity=".3"/>
+          <line x1="100" y1="195" x2="300" y2="195" stroke="var(--teal)" stroke-width="1" opacity=".3"/>
+          <circle cx="120" cy="185" r="8" stroke="var(--electric)" stroke-width="1.5" fill="var(--electric-dim)"/>
+          <circle cx="280" cy="185" r="8" stroke="var(--electric)" stroke-width="1.5" fill="var(--electric-dim)"/>
+          <!-- Moving objects on belt -->
+          <rect x="160" y="168" width="18" height="18" rx="2" stroke="var(--accent)" stroke-width="1" fill="var(--surface2)">
+            <animate attributeName="x" values="120;260;120" dur="5s" repeatCount="indefinite"/>
+          </rect>
+          <rect x="220" y="168" width="18" height="18" rx="2" stroke="var(--accent)" stroke-width="1" fill="var(--surface2)">
+            <animate attributeName="x" values="180;260;180" dur="5s" repeatCount="indefinite" begin="2s"/>
+          </rect>
+          <!-- Robotic arm above -->
+          <rect x="185" y="130" width="30" height="10" rx="3" stroke="var(--electric)" stroke-width="1.5" fill="var(--electric-dim)"/>
+          <line x1="200" y1="130" x2="200" y2="100" stroke="var(--electric)" stroke-width="2"/>
+          <line x1="200" y1="100" x2="240" y2="75" stroke="var(--electric)" stroke-width="2"/>
+          <circle cx="200" cy="100" r="5" stroke="var(--teal)" stroke-width="1.5" fill="var(--cyan-dim)"/>
+          <circle cx="240" cy="75" r="5" stroke="var(--teal)" stroke-width="1.5" fill="var(--cyan-dim)"/>
+          <!-- Gripper -->
+          <line x1="236" y1="70" x2="230" y2="58" stroke="var(--cyan)" stroke-width="1.5"/>
+          <line x1="244" y1="70" x2="250" y2="58" stroke="var(--cyan)" stroke-width="1.5"/>
+          <!-- Controller box -->
+          <rect x="60" y="70" width="60" height="50" rx="4" stroke="var(--cyan)" stroke-width="1.5" fill="var(--surface2)"/>
+          <text x="70" y="90" fill="var(--cyan)" font-size="7" font-family="monospace">CTRL</text>
+          <circle cx="75" cy="105" r="3" fill="var(--teal)"><animate attributeName="opacity" values="1;.3;1" dur="1s" repeatCount="indefinite"/></circle>
+          <circle cx="88" cy="105" r="3" fill="var(--accent)"><animate attributeName="opacity" values="1;.3;1" dur="1.3s" repeatCount="indefinite" begin=".4s"/></circle>
+          <circle cx="101" cy="105" r="3" fill="var(--cyan)"><animate attributeName="opacity" values="1;.3;1" dur="1.6s" repeatCount="indefinite" begin=".8s"/></circle>
+          <!-- Connection lines -->
+          <line x1="120" y1="95" x2="185" y2="135" stroke="var(--teal)" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/>
+          <text x="115" y="235" fill="var(--text-muted)" font-size="7" font-family="monospace">INDUSTRIAL AUTOMATION CONTROL</text>
+        </svg>
+        <span class="project-number">PRJ_005</span>
+        <div class="project-tags"><span class="project-tag">Automation</span><span class="project-tag">Control</span></div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Automation Workstation Controller</h3>
+        <p class="project-desc">Controller system for an automated workstation integrating sensor inputs, actuator control, and sequenced task execution for industrial automation workflows.</p>
+        <div class="project-links"><a href="https://github.com/sudeekshach/automation-workstation-controller" class="project-link" target="_blank">GitHub</a></div>
+      </div>
+    </div>
+    <!-- Project 6: IEEE Paper - Intelligent Parking Guidance System -->
+    <div class="project-card reveal">
+      <div class="project-img">
+        <svg viewBox="0 0 400 250" fill="none">
+          <!-- Parking lot top-down view -->
+          <rect x="60" y="40" width="280" height="170" rx="6" stroke="var(--border)" stroke-width="1.5" fill="var(--surface2)"/>
+          <!-- Parking spaces -->
+          <rect x="80" y="55" width="35" height="55" rx="2" stroke="var(--teal)" stroke-width="1" fill="none" opacity=".4"/>
+          <rect x="120" y="55" width="35" height="55" rx="2" stroke="var(--teal)" stroke-width="1" fill="none" opacity=".4"/>
+          <rect x="160" y="55" width="35" height="55" rx="2" stroke="var(--accent)" stroke-width="1.5" fill="var(--cyan-dim)" opacity=".6" stroke-dasharray="4 2">
+            <animate attributeName="opacity" values=".3;.7;.3" dur="2s" repeatCount="indefinite"/>
+          </rect>
+          <text x="168" y="88" fill="var(--accent)" font-size="7" font-family="monospace">FREE</text>
+          <rect x="200" y="55" width="35" height="55" rx="2" stroke="var(--teal)" stroke-width="1" fill="none" opacity=".4"/>
+          <rect x="240" y="55" width="35" height="55" rx="2" stroke="var(--teal)" stroke-width="1" fill="none" opacity=".4"/>
+          <rect x="280" y="55" width="35" height="55" rx="2" stroke="var(--accent)" stroke-width="1.5" fill="var(--cyan-dim)" opacity=".6" stroke-dasharray="4 2">
+            <animate attributeName="opacity" values=".7;.3;.7" dur="2s" repeatCount="indefinite"/>
+          </rect>
+          <text x="288" y="88" fill="var(--accent)" font-size="7" font-family="monospace">FREE</text>
+          <!-- Parked cars (filled spots) -->
+          <rect x="84" y="62" width="27" height="42" rx="5" fill="var(--electric-dim)" stroke="var(--electric)" stroke-width="1" opacity=".6"/>
+          <rect x="124" y="62" width="27" height="42" rx="5" fill="var(--electric-dim)" stroke="var(--electric)" stroke-width="1" opacity=".6"/>
+          <rect x="204" y="62" width="27" height="42" rx="5" fill="var(--electric-dim)" stroke="var(--electric)" stroke-width="1" opacity=".6"/>
+          <rect x="244" y="62" width="27" height="42" rx="5" fill="var(--electric-dim)" stroke="var(--electric)" stroke-width="1" opacity=".6"/>
+          <!-- Bottom row -->
+          <rect x="80" y="140" width="35" height="55" rx="2" stroke="var(--teal)" stroke-width="1" fill="none" opacity=".4"/>
+          <rect x="120" y="140" width="35" height="55" rx="2" stroke="var(--teal)" stroke-width="1" fill="none" opacity=".4"/>
+          <rect x="160" y="140" width="35" height="55" rx="2" stroke="var(--teal)" stroke-width="1" fill="none" opacity=".4"/>
+          <rect x="200" y="140" width="35" height="55" rx="2" stroke="var(--teal)" stroke-width="1" fill="none" opacity=".4"/>
+          <rect x="84" y="147" width="27" height="42" rx="5" fill="var(--electric-dim)" stroke="var(--electric)" stroke-width="1" opacity=".6"/>
+          <rect x="124" y="147" width="27" height="42" rx="5" fill="var(--electric-dim)" stroke="var(--electric)" stroke-width="1" opacity=".6"/>
+          <rect x="164" y="147" width="27" height="42" rx="5" fill="var(--electric-dim)" stroke="var(--electric)" stroke-width="1" opacity=".6"/>
+          <rect x="204" y="147" width="27" height="42" rx="5" fill="var(--electric-dim)" stroke="var(--electric)" stroke-width="1" opacity=".6"/>
+          <!-- Camera icon top-right -->
+          <circle cx="320" cy="150" r="14" stroke="var(--cyan)" stroke-width="1.5" fill="var(--surface2)"/>
+          <circle cx="320" cy="150" r="6" stroke="var(--cyan)" stroke-width="1" fill="var(--cyan-dim)"/>
+          <circle cx="320" cy="150" r="2.5" fill="var(--cyan)">
+            <animate attributeName="opacity" values=".7;1;.7" dur="1.5s" repeatCount="indefinite"/>
+          </circle>
+          <!-- Vision cone from camera -->
+          <line x1="308" y1="142" x2="200" y2="85" stroke="var(--cyan)" stroke-width=".7" opacity=".3" stroke-dasharray="3 3"/>
+          <line x1="306" y1="150" x2="170" y2="120" stroke="var(--cyan)" stroke-width=".7" opacity=".3" stroke-dasharray="3 3"/>
+          <!-- IoT signal waves -->
+          <path d="M330 135 Q340 140 330 148" stroke="var(--accent)" stroke-width="1" fill="none" opacity=".4"/>
+          <path d="M336 130 Q350 140 336 153" stroke="var(--accent)" stroke-width="1" fill="none" opacity=".3"/>
+          <!-- Edge device -->
+          <rect x="250" y="150" width="40" height="22" rx="3" stroke="var(--teal)" stroke-width="1" fill="var(--cyan-dim)"/>
+          <text x="254" y="164" fill="var(--teal)" font-size="6" font-family="monospace">EDGE</text>
+          <text x="105" y="232" fill="var(--text-muted)" font-size="7" font-family="monospace">CV &#183; IoT &#183; EDGE COMPUTING &#183; IEEE</text>
+        </svg>
+        <span class="project-number">PRJ_006</span>
+        <div class="project-tags"><span class="project-tag">IEEE</span><span class="project-tag">CV</span><span class="project-tag">IoT</span><span class="project-tag">Edge</span></div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Intelligent Parking Guidance System</h3>
+        <p class="project-desc">IEEE-published research on a smart parking guidance system using an infrastructure monocular camera with computer vision, IoT, and edge computing to detect available spaces and guide drivers in real time.</p>
+        <div class="project-links"><a href="https://ieeexplore.ieee.org/document/11146687" class="project-link" target="_blank">IEEE Paper</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Experience -->
+<section id="experience" style="background:var(--bg2)">
+  <div class="section-header reveal">
+    <p class="section-tag">// 004 &#8212; Experience</p>
+    <h2 class="section-title">Career <span>Timeline</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      <span class="timeline-date">Aug 2025 &#8212; Present</span>
+      <h3 class="timeline-role">Robotics Systems Engineering Intern</h3>
+      <p class="timeline-company">Dexterity Inc.</p>
+      <p class="timeline-location">&#128205; Redwood City, USA</p>
+      <div class="timeline-desc"><ul>
+        <li>Designed a PLC-based interface testing framework to validate third-party robotic subsystems independently of full system commissioning</li>
+        <li>Implemented signal verification and communication tests on Beckhoff PLCs covering digital/analog I/O and PROFINET interfaces</li>
+        <li>Executed system-level debugging across PLCs, sensors, and control interfaces to identify integration issues prior to deployment</li>
+      </ul></div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-date">Jun 2024 &#8212; Aug 2025</span>
+      <h3 class="timeline-role">Mechatronics Engineer</h3>
+      <p class="timeline-company">Naware</p>
+      <p class="timeline-location">&#128205; Edina, USA</p>
+      <div class="timeline-desc"><ul>
+        <li>Developed and deployed real-time computer vision pipelines on NVIDIA Jetson Orin Nano for embedded detection and tracking</li>
+        <li>Integrated actuators, valves, sensors, and embedded control logic for reliable hardware-software interaction</li>
+        <li>Performed system-level testing, calibration, and performance tuning on deployed industrial hardware</li>
+      </ul></div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-date">Apr 2023 &#8212; Jun 2024</span>
+      <h3 class="timeline-role">Graduate Student Researcher</h3>
+      <p class="timeline-company">Battery Electric and Intelligent Vehicles Lab, Arizona State University</p>
+      <p class="timeline-location">&#128205; Mesa, USA</p>
+      <div class="timeline-desc"><ul>
+        <li>Built a CUDA-accelerated perception and sensor-fusion pipeline for autonomous vehicle navigation</li>
+        <li>Integrated LiDAR, camera, radar, and GNSS/IMU into a unified localization and perception stack</li>
+        <li>Deployed and validated on a drive-by-wire Ford Mustang Mach-E, improving localization accuracy by ~18%</li>
+      </ul></div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-date">Apr 2021 &#8212; Jul 2021</span>
+      <h3 class="timeline-role">Embedded Firmware Development Intern</h3>
+      <p class="timeline-company">Greendzine Technologies</p>
+      <p class="timeline-location">&#128205; Bangalore, India</p>
+      <div class="timeline-desc"><ul>
+        <li>Developed embedded C/C++ firmware for sensor and actuator integration on microcontroller-based systems</li>
+        <li>Implemented and tested low-level hardware interfaces for reliable device communication and control</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- Education -->
+<section id="education">
+  <div class="section-header reveal">
+    <p class="section-tag">// 005 &#8212; Education</p>
+    <h2 class="section-title">Academic <span>Background</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="edu-grid">
+    <div class="edu-card reveal">
+      <span class="edu-icon">&#127891;</span>
+      <h4 class="edu-degree">M.Sc. Robotics and Autonomous Systems</h4>
+      <p class="edu-school">Arizona State University</p>
+      <p class="edu-meta">Aug 2022 &#8212; May 2024 &#183; Tempe, USA</p>
+      <p class="edu-meta" style="color:var(--text-dim)">Concentration: Systems Engineering</p>
+      <p class="edu-gpa">GPA: 3.93 / 4.0</p>
+    </div>
+    <div class="edu-card reveal reveal-delay-1">
+      <span class="edu-icon">&#127891;</span>
+      <h4 class="edu-degree">B.Tech. Electronics &amp; Communication Engineering</h4>
+      <p class="edu-school">V R Siddhartha Engineering College</p>
+      <p class="edu-meta">Jul 2018 &#8212; May 2022 &#183; Vijayawada, India</p>
+      <p class="edu-gpa">GPA: 7.8 / 10</p>
+    </div>
+  </div>
+</section>
+
+<!-- Languages & Extras -->
+<section style="background:var(--bg2)">
+  <div class="section-header reveal">
+    <p class="section-tag">// 006 &#8212; Extras</p>
+    <h2 class="section-title">Languages <span>&amp; Interests</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="extras-grid">
+    <div class="extra-card reveal">
+      <span class="extra-icon">&#127760;</span>
+      <h4 class="extra-title">English &#8212; Fluent</h4>
+      <p class="extra-desc">Professional working proficiency across all technical and business communication.</p>
+    </div>
+    <div class="extra-card reveal reveal-delay-1">
+      <span class="extra-icon">&#127465;&#127466;</span>
+      <h4 class="extra-title">German &#8212; Basic</h4>
+      <p class="extra-desc">Foundational conversational skills, actively learning.</p>
+    </div>
+    <div class="extra-card reveal reveal-delay-2">
+      <span class="extra-icon">&#127758;</span>
+      <h4 class="extra-title">Open to Relocation</h4>
+      <p class="extra-desc">Currently based in the USA. Open to relocation to the Netherlands and across Europe.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact" class="contact-section">
+  <div class="section-header reveal">
+    <p class="section-tag">// 007 &#8212; Connect</p>
+    <h2 class="section-title">Let's <span>Build Together</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <h3>Ready to innovate?</h3>
+      <p>I'm always open to discussing new robotic systems, research collaborations, or engineering challenges. Whether it's autonomous vehicles, industrial robotics, or edge AI &#8212; let's connect and create something extraordinary.</p>
+      <div class="contact-links">
+        <a href="mailto:sudeekshach23@gmail.com" class="contact-link">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          sudeekshach23@gmail.com
+        </a>
+        <a href="tel:+15125501257" class="contact-link">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +1 (512) 550-1257
+        </a>
+        <a href="https://linkedin.com/in/sudeeksha-chagarlamudi/" class="contact-link" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+        <a href="https://github.com/sudeekshach" class="contact-link" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub
+        </a>
+        <a href="#" class="contact-link">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Redwood City, CA, USA
+        </a>
+      </div>
+    </div>
+    <form class="contact-form reveal reveal-delay-2" action="https://formspree.io/f/mwvnkwzb" method="POST">
+      <div class="form-group"><label>Name</label><input type="text" name="name" placeholder="Your Name" required></div>
+      <div class="form-group"><label>Email</label><input type="email" name="email" placeholder="your@email.com" required></div>
+      <div class="form-group"><label>Message</label><textarea name="message" rows="5" placeholder="Tell me about your project or opportunity..." required></textarea></div>
+      <input type="hidden" name="_subject" value="New Portfolio Contact from {{name}}">
+      <input type="hidden" name="_next" value="">
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">Send Message &#8599;</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 <span class="footer-cyan">Sudeeksha Chagarlamudi</span> &#8212; Robotics Systems Engineer</p>
+</footer>
+
+<script>
+// Particles
+const pc=document.getElementById('particles');
+for(let i=0;i<30;i++){const p=document.createElement('div');p.className='particle';
+p.style.left=Math.random()*100+'%';p.style.animationDuration=(8+Math.random()*12)+'s';
+p.style.animationDelay=Math.random()*10+'s';p.style.width=p.style.height=(1+Math.random()*2)+'px';pc.appendChild(p)}
+
+// Navbar scroll
+const nav=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>50)});
+
+// Scroll reveal
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:.15});
+document.querySelectorAll('.reveal,.timeline-item,.skill-item').forEach(el=>obs.observe(el));
+
+// Counter animation
+const cObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){
+  const el=e.target,isDec=el.dataset.decimal==='true',target=parseFloat(el.dataset.count),
+  suffix=el.dataset.suffix||'';let cur=0;const step=target/40;
+  const t=setInterval(()=>{cur+=step;if(cur>=target){cur=target;clearInterval(t)}
+  el.textContent=(isDec?cur.toFixed(2):Math.round(cur))+suffix},30);cObs.unobserve(el)}})},{threshold:.5});
+document.querySelectorAll('.stat-num').forEach(el=>cObs.observe(el));
+
+// Smooth scroll
+document.querySelectorAll('.nav-links a').forEach(link=>{link.addEventListener('click',e=>{
+  e.preventDefault();const t=document.querySelector(link.getAttribute('href'));
+  if(t)t.scrollIntoView({behavior:'smooth'});nav.classList.remove('open')})});
+</script>
+</body>
+</html>
